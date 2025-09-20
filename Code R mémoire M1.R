@@ -128,31 +128,3 @@ for (i in 1:4) {
                          round(summary(mod)$r.squared, 3)),
          bty = "n")
 }
-
-
-
-############PAS INCLU DANS LE MEMOIRE###################
-########################################################
-# Supposons que ton fichier est déjà chargé dans df, contenant les 4 colonnes : Q_GA, Q_GT, Q_PA, Q_PT
-
-# Créer un tableau long avec toutes les observations
-df_long <- data.frame(
-  transfert = c(df$Q_GA, df$Q_GT, df$Q_PA, df$Q_PT),
-  resource = rep(c("money", "time", "money", "time"), each = nrow(df)),
-  frame = rep(c("gain", "gain", "loss", "loss"), each = nrow(df))
-)
-
-# Convertir en facteurs
-df_long$resource <- factor(df_long$resource, levels = c("money", "time"))
-df_long$frame <- factor(df_long$frame, levels = c("gain", "loss"))
-
-# Modèle avec interaction
-model <- lm(transfert ~ resource * frame, data = df_long)
-
-# Résumé du modèle
-summary(model)
-
-boxplot(transfert ~ frame * resource, data = df_long,
-        col = c("lightblue", "lightgreen"),
-        xlab = "Condition (Frame × Resource)",
-        ylab = "Amount sent")
